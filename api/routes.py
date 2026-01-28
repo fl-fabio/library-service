@@ -4,17 +4,22 @@ from services.library_service import LibraryController
 
 def create_router(library_service: LibraryController):
     router = APIRouter()
+    
+    @router.post("/members")
+    def register_member_endpoint(name: str):
+        member = library_service.register_member(name)
+        return {"status": "success", "member_id": member.member_id, "name": member.name}
 
     @router.post("/loans/{member_id}/{isbn}")
-    def loan_endpoint(member_id: int, isbn: str):
+    def loan_endpoint(member_id: str, isbn: str):
         try:
             message = library_service.register_loan(member_id, isbn)
             return {"status": "success", "message": message}
         except (ValueError, PermissionError) as e:
             raise HTTPException(status_code=400, detail=str(e))
 
-    @router.delete("/loans/{member_id}/{isbn}") # Aggiunto lo slash iniziale
-    def return_endpoint(member_id: int, isbn: str):
+    @router.delete("/loans/{member_id}/{isbn}")
+    def return_endpoint(member_id: str, isbn: str):
         try:
             message = library_service.deregister_loan(member_id, isbn)
             return {"status": "success", "message": message}
@@ -32,7 +37,7 @@ def create_router(library_service: LibraryController):
         return {"status": "success", "count": len(loans), "data": loans}
 
     @router.get("/loans/{member_id}")
-    def member_loans_endpoint(member_id: int):
+    def member_loans_endpoint(member_id: str):
         member = library_service.members.get(member_id)
         if not member:
             raise HTTPException(status_code=404, detail="Membro non trovato")

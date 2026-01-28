@@ -1,10 +1,11 @@
 from typing import List
+from uuid import uuid4
 from .book import Book
 
 class Member:
-  def __init__(self, name: str, member_id: int):
+  def __init__(self, name: str):
     self.name = name
-    self.member_id = member_id
+    self.member_id = str(uuid4())
     self.borrowed_books: List[Book] = []
     
   def take_book(self, book: Book):

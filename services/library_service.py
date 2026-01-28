@@ -4,9 +4,14 @@ from repositories.catalog import Catalog
 class LibraryController:
     def __init__(self, catalog: Catalog):
         self.catalog = catalog
-        self.members: dict[int, Member] = {}
+        self.members: dict[str, Member] = {}
     
-    def register_loan(self, member_id: int, isbn: str):
+    def register_member(self, name: str):
+        member = Member(name)
+        self.members[member.member_id] = member
+        return member
+    
+    def register_loan(self, member_id: str, isbn: str):
         member = self.members.get(member_id)
         book = self.catalog.get_by_isbn(isbn)
         
@@ -18,7 +23,7 @@ class LibraryController:
         member.take_book(book)
         return f"Prestito ok: {book.title} a {member.name}"
   
-    def deregister_loan(self, member_id: int, isbn: str):
+    def deregister_loan(self, member_id: str, isbn: str):
         member = self.members.get(member_id)
         book = self.catalog.get_by_isbn(isbn)
     

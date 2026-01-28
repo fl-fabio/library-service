@@ -1,10 +1,9 @@
 import uvicorn
 from fastapi import FastAPI
 from domains.book import Book
-from domains.member import Member # Corretto singolare
 from repositories.catalog import Catalog
 from services.library_service import LibraryController
-from api.routes import create_router # Devi importare la funzione!
+from api.routes import create_router
 
 app = FastAPI(title="Sistema Biblioteca Microservice")
 
@@ -14,7 +13,7 @@ catalog.add_resource(Book("123", "Il Signore degli Anelli"))
 
 library_service = LibraryController(catalog)
 # Aggiungiamo un membro di test altrimenti il dizionario è vuoto
-library_service.members[1] = Member("Mario Rossi", 1)
+library_service.register_member("Mario Rossi")
 
 # Iniezione del servizio nel router
 app.include_router(create_router(library_service))
