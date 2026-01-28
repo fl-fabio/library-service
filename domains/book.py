@@ -12,3 +12,6 @@ class Book:
   def return_book(self):
     self.is_loaned = False
 
+  def new_method(self):
+    pass
+
