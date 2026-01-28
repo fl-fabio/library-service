@@ -1,0 +1,6 @@
+services:
+  biblioteca-api:
+    build: .
+    container_name: biblioteca-api
+    ports:
+      - "8000:8000"
